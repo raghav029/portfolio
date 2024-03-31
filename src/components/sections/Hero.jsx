@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Bio } from "../../data/constants";
 import Typewriter from "typewriter-effect";
-import HeroImg from "../../images/HeroImage.jpg";
+import HeroImg from "../../images/HeroImage.jpeg";
 import HeroBgAnimation from "../HeroBgAnimation";
 import { Tilt } from "react-tilt";
 import { motion } from "framer-motion";
@@ -58,7 +58,7 @@ const HeroRightContainer = styled.div`
   width: 100%;
   order: 2;
   display: flex;
-  justify-content: end;
+  justify-content:center;
   @media (max-width: 960px) {
     order: 1;
     display: flex;
@@ -178,7 +178,7 @@ const ResumeButton = styled.a`
 `;
 
 const Img = styled.img`
-  border-radius: 50%;
+  border-radius: 10%;
   width: 100%;
   height: 100%;
   max-width: 400px;
@@ -256,7 +256,7 @@ const Hero = () => {
             <HeroRightContainer>
               <motion.div {...headContentAnimation}>
                 <Tilt>
-                  <Img src={HeroImg} alt="Rishav Chanda" />
+                  <Img src={HeroImg} alt="Raghav kumar jha" />
                 </Tilt>
               </motion.div>
             </HeroRightContainer>
