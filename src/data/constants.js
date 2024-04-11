@@ -285,6 +285,25 @@ export const skills = [
 export const experiences = [
   {
     id: 0,
+    img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAfCAMAAAAlbpZMAAAAPFBMVEVHcEz9yC39yC39yC39yC39yC39yC39yC39yC39yC39yC39yC39yC39yC39yC39yC39yC39yC39yC39yC2mxCn5AAAAFHRSTlMAWKHW9P9FeBfgCyKvy4fnkmvBNLy6ZgYAAAEKSURBVHgBVJIFgoUgFEUvcUDS2v9ap8CRf2xfhx6MdR7vbNAnkZeoly2xkrImhVR58Ako0wJokUnnl2G1A/RjCE4/HC7BywWeZhickhgkcYr/XJwUmNyG1sSguyDL5NJOOKeW45DjulWsBxmmnhpcIt7VORsgqKkB5APY5eNI2tN1KwGhAHi56FNECeqorSqNXF0KrSQBTZIDBe+AS5atEjVK0EXXFQR0Baq4H5uDLPDtsEWC8nsfcYxTuO4cE5IiSVKCLin/3ixgRq8PqUPQr0iGGVPKcErBa9De+agM40WyLXtgFknTwvmKjlOfGHNvebvPtgoGdZnz9+ghw44hwwbKDKzMfLBEDQDoMw0bberm1wAAAABJRU5ErkJggg==",
+    role: "Intern",
+    company: "PES VENTURES LAB ",
+    date: "Nov 2023 - Present",
+    desc: "Enhanced user experiences on Neurobit PSG & Hybrid, Portals by resolving bugs & reduced load time by 40%. Built Neurobit Analytics portal using React Js with seamless interaction of REST APIs using AXIOS optimized with React Query. Refactored previous code to TypeScript, updated with new dependency and integrated Vite with Jest for Unit Testing.",
+    skills: [
+      "ReactJS",
+      "Redux",
+      "NodeJs",
+      "Microsoft Azure",
+      "Material UI",
+      "HTML",
+      "CSS",
+      "ThreeJs",
+    ],
+    doc: "https://firebasestorage.googleapis.com/v0/b/flexi-coding.appspot.com/o/Screenshot%20from%202024-01-25%2022-38-31.png?alt=media&token=2785903f-1a4e-41f5-afd2-6adcfe56d058",
+  },
+  {
+    id: 0,
     img: "https://sci.ngo/wp-content/uploads/sci_logo_blue-2.png",
     role: "Website Developer",
     company: "Service Civil International (SCI) ",
@@ -386,19 +405,16 @@ export const projects = [
     title: "NAMMA BMSIT",
     date: "Jun 2023 - Jul 2023",
     description:
-"• Developed a full-stack application that demonstrates CRUD operations on a Event management,Canteen management. • Utilized React native, MySQL, and Flask to create API endpoints for seamless interaction with the MySQL • Implemented GET,POST,PUT,DELETE methods to handle search,register,update and delete requests."   , image:
-      "",
+"• Developed a full-stack application that demonstrates CRUD operations on a Event management,Canteen management. • Utilized React native, MySQL, and Flask to create API endpoints for seamless interaction with the MySQL • Implemented GET,POST,PUT,DELETE methods to handle search,register,update and delete requests."  ,
+    image: "",
     tags: [
       "Docker",
       "AWS",
       "DuckDNS",
-      "Eslint",
-      "Husky",
       "CI/CD",
       "React Native",
       "MongoDb",
-      "Node Js",
-      "Express Js",
+      "Flask",
       "Redux",
     ],
     category: "Android app",
