@@ -170,58 +170,9 @@ export const skills = [
           "https://seeklogo.com/images/N/netlify-logo-BD8F8A77E2-seeklogo.com.png",
       },
       {
-        name: "VS Code",
-        image:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Visual_Studio_Code_1.35_icon.svg/512px-Visual_Studio_Code_1.35_icon.svg.png?20210804221519",
-      },
-      {
         name: "Postman",
         image:
           "https://static-00.iconduck.com/assets.00/postman-icon-497x512-beb7sy75.png",
-      },
-      {
-        title: "Others",
-        skills: [
-          {
-            name: "Git",
-            image:
-              "https://e7.pngegg.com/pngimages/713/558/png-clipart-computer-icons-pro-git-github-logo-text-logo-thumbnail.png",
-          },
-          {
-            name: "GitHub",
-            image:
-              "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
-          },
-          {
-            name: "Netlify",
-            image:
-              "https://seeklogo.com/images/N/netlify-logo-BD8F8A77E2-seeklogo.com.png",
-          },
-          {
-            name: "VS Code",
-            image:
-              "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Visual_Studio_Code_1.35_icon.svg/512px-Visual_Studio_Code_1.35_icon.svg.png?20210804221519",
-          },
-          {
-            name: "Postman",
-            image:
-              "https://static-00.iconduck.com/assets.00/postman-icon-497x512-beb7sy75.png",
-          },
-          {
-            name: "Wireshark",
-            image: "https://www.wireshark.org/assets/img/wireshark-logo.png",
-          },
-          {
-            name: "Figma",
-            image:
-              "https://s3-alpha.figma.com/hub/file/1481185752/fa4cd070-6a79-4e1b-b079-8b9b76408595-cover.png",
-          },
-        ],
-      },
-      {
-        name: "Figma",
-        image:
-          "https://s3-alpha.figma.com/hub/file/1481185752/fa4cd070-6a79-4e1b-b079-8b9b76408595-cover.png",
       },
     ],
   },
@@ -288,27 +239,8 @@ export const experiences = [
     img: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAfCAMAAAAlbpZMAAAAPFBMVEVHcEz9yC39yC39yC39yC39yC39yC39yC39yC39yC39yC39yC39yC39yC39yC39yC39yC39yC39yC39yC2mxCn5AAAAFHRSTlMAWKHW9P9FeBfgCyKvy4fnkmvBNLy6ZgYAAAEKSURBVHgBVJIFgoUgFEUvcUDS2v9ap8CRf2xfhx6MdR7vbNAnkZeoly2xkrImhVR58Ako0wJokUnnl2G1A/RjCE4/HC7BywWeZhickhgkcYr/XJwUmNyG1sSguyDL5NJOOKeW45DjulWsBxmmnhpcIt7VORsgqKkB5APY5eNI2tN1KwGhAHi56FNECeqorSqNXF0KrSQBTZIDBe+AS5atEjVK0EXXFQR0Baq4H5uDLPDtsEWC8nsfcYxTuO4cE5IiSVKCLin/3ixgRq8PqUPQr0iGGVPKcErBa9De+agM40WyLXtgFknTwvmKjlOfGHNvebvPtgoGdZnz9+ghw44hwwbKDKzMfLBEDQDoMw0bberm1wAAAABJRU5ErkJggg==",
     role: "Intern",
     company: "PES VENTURES LAB ",
-    date: "Nov 2023 - Present",
-    desc: "Enhanced user experiences on Neurobit PSG & Hybrid, Portals by resolving bugs & reduced load time by 40%. Built Neurobit Analytics portal using React Js with seamless interaction of REST APIs using AXIOS optimized with React Query. Refactored previous code to TypeScript, updated with new dependency and integrated Vite with Jest for Unit Testing.",
-    skills: [
-      "ReactJS",
-      "Redux",
-      "NodeJs",
-      "Microsoft Azure",
-      "Material UI",
-      "HTML",
-      "CSS",
-      "ThreeJs",
-    ],
-    doc: "https://firebasestorage.googleapis.com/v0/b/flexi-coding.appspot.com/o/Screenshot%20from%202024-01-25%2022-38-31.png?alt=media&token=2785903f-1a4e-41f5-afd2-6adcfe56d058",
-  },
-  {
-    id: 0,
-    img: "https://sci.ngo/wp-content/uploads/sci_logo_blue-2.png",
-    role: "Website Developer",
-    company: "Service Civil International (SCI) ",
-    date: "Nov 2023 - Feb 2024",
-    desc: "Enhanced user experiences on Neurobit PSG & Hybrid, Portals by resolving bugs & reduced load time by 40%. Built Neurobit Analytics portal using React Js with seamless interaction of REST APIs using AXIOS optimized with React Query. Refactored previous code to TypeScript, updated with new dependency and integrated Vite with Jest for Unit Testing.",
+    date: "Nov 2023 - Jan 2024",
+    desc: "I developed a comprehensive Cross Check authentication system for company emails, integrating robust data retrieval from both Google Cloud Platform (GCP) and Azure Active Directory. This system is designed to ensure enhanced security and accuracy by providing real-time, active employee details, thereby significantly reducing the risk of unauthorized access and streamlining the authentication process.",
     skills: [
       "ReactJS",
       "Redux",
@@ -323,7 +255,26 @@ export const experiences = [
   },
   {
     id: 1,
-    img: "https://media.licdn.com/dms/image/D4D0BAQFcUdH8ZSSC8w/company-logo_100_100/0/1687757895412/deloai_private_limited_logo?e=1720051200&v=beta&t=sRl1QCAiLLTCdwLuP2V7YuCRK9nE7Ieb5tLUhvNrbtc",
+    img: "https://sci.ngo/wp-content/uploads/sci_logo_blue-2.png",
+    role: "Website Developer",
+    company: "Service Civil International (SCI) ",
+    date: "Nov 2023 - Feb 2024",
+    desc: "Led the development of the website 2020.sci.ngo for an international NGO based in Belgium, overseeing the project from inception to completion.Conducted meetings with international clients to gather requirements, understand their vision, and provide regular project updates.Built the website from scratch, tailored to meet the specific needs and branding of the NGO.Collaborated with the client to integrate essential features, including donation systems, event calendars, and a virtual museum, to enhance the online presence and functionality of the website.",
+    skills: [
+      "ReactJS",
+      "Redux",
+      "NodeJs",
+      "Microsoft Azure",
+      "Material UI",
+      "HTML",
+      "CSS",
+      "ThreeJs",
+    ],
+    doc: "https://firebasestorage.googleapis.com/v0/b/flexi-coding.appspot.com/o/Screenshot%20from%202024-01-25%2022-38-31.png?alt=media&token=2785903f-1a4e-41f5-afd2-6adcfe56d058",
+  },
+  {
+    id: 2,
+    img: "https://media.licdn.com/dms/image/v2/D4D0BAQFcUdH8ZSSC8w/company-logo_100_100/company-logo_100_100/0/1687757895412/deloai_private_limited_logo?e=1730937600&v=beta&t=_98x-hm-HjDg4T_mDN2GAJZxJt_B8idS1cgP6ZE7TPs",
     role: "Project Development",
     company: "Deloai Pvt LTD.",
     date: "Jan 2023 - Jan 2024",
@@ -332,8 +283,8 @@ export const experiences = [
     doc: "https://firebasestorage.googleapis.com/v0/b/flexi-coding.appspot.com/o/1696514649120.jpeg?alt=media&token=e7f6757b-edfa-4138-a692-d6709eeef3e2",
   },
   {
-    id: 2,
-    img: "https://media.licdn.com/dms/image/C560BAQH7eET4uw2OTw/company-logo_100_100/0/1657897154570/abhaya_secure_logo?e=1720051200&v=beta&t=OOMqRf_XEbR3w_K50b5RrYcBROi4T0zaABdn4AbN0So",
+    id: 3,
+    img: "https://media.licdn.com/dms/image/C560BAQH7eET4uw2OTw/company-logo_100_100/0/1657897154570/abhaya_secure_logo?e=1730937600&v=beta&t=6GKXOfOXaJgoU-M7K0PrRCBtVVYg-vgUS1kXsvUKaOw",
     role: "Intern",
     company: "Abhaya Secure",
     date: "June 2021 - Oct 2021",
@@ -355,28 +306,10 @@ export const education = [
     img: "https://th.bing.com/th?id=OSK.517574c8b64a67b2d6e9f9c3d5aed178&w=46&h=46&c=11&rs=1&qlt=80&o=6&dpr=2&pid=SANGAM",
     school: "BMS INSTITUTE OF TECHNOLOGY AND MANAGEMENT,BENGALURU",
     date: "Jan 2021 - Jun 2025",
-    grade: "8.01 CGPA",
+    grade: "8.17 CGPA",
     desc: "I am currently pursuing a Bachelor's degree in Information Science and Engineering at BMS INSTITUTE OF TECHNOLOGY AND MANAGEMENT,BENGALURU. I have completed 4 semesters and have a CGPA of 8.23. I have taken courses in Data Structures, Algorithms, Object-Oriented Programming, Database Management Systems, Operating Systems, and Computer Networks, among others. I am also a member of the Google Developers Student Club (GDSC) at BMSIT&M, where I am learning and working on exciting projects with a team of talented developers.",
     degree: "Bachelor of Engineering- BE, Information Science and Engineering",
-  },
-  {
-    id: 1,
-    img: "https://gddavdeoghar.org/MyImages/LOGO.png",
-    school: "Marwari High School",
-    date: "Apr 2018 - Jun 2020",
-    grade: "62%",
-    desc: "I completed my class 12 open school education at Marwari High School, Ranchi, where I studied Science with Computer Science.",
-    degree: "JAC(XII), Science with Computer",
-  },
-  {
-    id: 2,
-    img: "https://gddavdeoghar.org/MyImages/LOGO.png",
-    school: "GD DAV PUBLIC SCHOOL",
-    date: "Apr 2013- Apr 2018",
-    grade: "82%",
-    desc: "I completed my class 10 education at GD DAV PUBLIC SCHOOL, Ranchi, where I studied Science.",
-    degree: "CBSE(X), Science with Computer",
-  },
+  }
 ];
 
 export const projects = [
