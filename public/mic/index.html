@@ -3,642 +3,339 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice Recorder</title>
+    <title>Web Voice Recorder</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: Arial, sans-serif;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            padding: 20px;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
         }
-
         .container {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
-            max-width: 400px;
-            width: 100%;
         }
-
-        .title {
-            font-size: 28px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 30px;
-        }
-
-        .status-text {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 20px;
-        }
-
-        .recording-text {
-            color: #ff4757;
-            font-weight: bold;
-        }
-
-        .timer {
-            font-size: 32px;
-            font-weight: bold;
-            color: #ff4757;
-            margin: 20px 0;
-        }
-
-        .mic-button {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
+        button {
+            padding: 15px 30px;
+            margin: 10px;
             border: none;
+            border-radius: 30px;
+            font-size: 18px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 20px 0;
-            display: flex;
+            transition: background-color 0.3s ease;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 50px;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        #recordButton {
+            background-color: #007bff;
             color: white;
-            position: relative;
-            overflow: hidden;
         }
-
-        .mic-button.idle {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        #stopButton {
+            background-color: #dc3545;
+            color: white;
+            display: none; /* Hidden initially */
         }
-
-        .mic-button.recording {
-            background: linear-gradient(135deg, #ff4757 0%, #ff3742 100%);
-            animation: pulse 1.5s infinite;
+        #playButton, #cancelButton, #sendButton, #reRecordButton {
+            background-color: #6c757d;
+            color: white;
+            display: none; /* Hidden initially */
         }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        #playButton {
+            background-color: #28a745;
         }
-
-        .mic-button:active {
-            transform: scale(0.95);
+        #sendButton {
+            background-color: #28a745;
         }
-
-        .instruction {
-            font-size: 14px;
-            color: #999;
+        #reRecordButton {
+             background-color: #ffc107;
+        }
+        #cancelButton {
+             background-color: #6c757d;
+        }
+        #status {
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #333;
+        }
+        #duration {
+            font-size: 2em;
+            font-weight: bold;
             margin-top: 10px;
+            color: #007bff;
         }
-
-        .review-section {
-            display: none;
+        .controls {
+            margin-top: 20px;
         }
-
-        .review-section.active {
-            display: block;
-        }
-
-        .progress-container {
-            width: 100%;
-            height: 8px;
-            background: #e0e0e0;
-            border-radius: 4px;
-            margin: 20px 0;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            transition: width 0.1s ease;
-            border-radius: 4px;
-        }
-
-        .playback-controls {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .play-button {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: none;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .play-button:hover {
-            transform: scale(1.05);
-        }
-
-        .action-buttons {
+        .review-controls {
             display: flex;
             justify-content: space-around;
-            margin-top: 30px;
-            gap: 10px;
+            width: 100%;
+            margin-top: 20px;
         }
-
-        .action-btn {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 25px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .cancel-btn {
-            background: #95a5a6;
-            color: white;
-        }
-
-        .rerecord-btn {
-            background: #f39c12;
-            color: white;
-        }
-
-        .send-btn {
-            background: #27ae60;
-            color: white;
-        }
-
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .recording-indicator {
-            width: 20px;
-            height: 20px;
-            background: #ff4757;
-            border-radius: 50%;
-            margin: 20px auto;
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
-
-        .error-message {
-            background: #ff4757;
-            color: white;
-            padding: 10px;
-            border-radius: 10px;
-            margin: 20px 0;
-            display: none;
-        }
-
-        .success-message {
-            background: #27ae60;
-            color: white;
-            padding: 10px;
-            border-radius: 10px;
-            margin: 20px 0;
-            display: none;
-        }
-
-        .loading {
-            display: none;
-            margin: 20px 0;
-        }
-
-        .spinner {
-            width: 30px;
-            height: 30px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .icon {
+            margin-right: 8px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="title">Voice Recorder</h1>
-        
-        <div class="error-message" id="errorMessage"></div>
-        <div class="success-message" id="successMessage"></div>
-        <div class="loading" id="loadingMessage">
-            <div class="spinner"></div>
-            <p>Sending voice message...</p>
-        </div>
-
-        <!-- Recording State -->
-        <div id="recordingState">
-            <div class="status-text" id="statusText">Hold to Record</div>
-            <div class="timer" id="timer" style="display: none;">00:00</div>
-            <div class="recording-indicator" id="recordingIndicator" style="display: none;"></div>
-            
-            <button class="mic-button idle" id="micButton">
-                🎤
+        <div id="status">Press and hold to record</div>
+        <div id="duration">00:00</div>
+        <div class="controls">
+            <button id="recordButton">
+                <span class="icon">&#127909;</span> Record
             </button>
-            
-            <div class="instruction" id="instruction">Tap and hold to record</div>
+            <button id="stopButton">
+                <span class="icon">&#9209;</span> Stop
+            </button>
         </div>
-
-        <!-- Review State -->
-        <div class="review-section" id="reviewSection">
-            <div class="status-text">Review Recording</div>
-            <div class="timer" id="reviewTimer">00:00</div>
-            
-            <div class="progress-container">
-                <div class="progress-bar" id="progressBar"></div>
-            </div>
-            
-            <div class="playback-controls">
-                <button class="play-button" id="playButton">▶️</button>
-            </div>
-            
-            <div class="action-buttons">
-                <button class="action-btn cancel-btn" id="cancelBtn">
-                    🗑️ Cancel
-                </button>
-                <button class="action-btn rerecord-btn" id="rerecordBtn">
-                    🔄 Re-record
-                </button>
-                <button class="action-btn send-btn" id="sendBtn">
-                    📤 Send
-                </button>
-            </div>
+        <div class="review-controls">
+            <button id="playButton">
+                <span class="icon">&#9654;</span> Play
+            </button>
+            <button id="cancelButton">
+                <span class="icon">&#10060;</span> Cancel
+            </button>
+            <button id="reRecordButton">
+                <span class="icon">&#8635;</span> Re-record
+            </button>
+            <button id="sendButton">
+                <span class="icon">&#9993;</span> Send
+            </button>
         </div>
     </div>
 
     <script>
-        class VoiceRecorder {
-            constructor() {
-                this.mediaRecorder = null;
-                this.audioChunks = [];
-                this.audioBlob = null;
-                this.audioUrl = null;
-                this.audio = null;
-                this.isRecording = false;
-                this.isPlaying = false;
-                this.recordingDuration = 0;
-                this.playbackPosition = 0;
-                this.recordingTimer = null;
-                this.playbackTimer = null;
-                
-                this.initializeElements();
-                this.bindEvents();
-                this.checkBrowserSupport();
-            }
+        let mediaRecorder;
+        let audioChunks = [];
+        let audioBlob;
+        let audioPlayer = new Audio();
+        let recordingStartTime;
+        let recordingInterval;
+        let playbackInterval;
 
-            initializeElements() {
-                this.micButton = document.getElementById('micButton');
-                this.statusText = document.getElementById('statusText');
-                this.timer = document.getElementById('timer');
-                this.instruction = document.getElementById('instruction');
-                this.recordingIndicator = document.getElementById('recordingIndicator');
-                this.recordingState = document.getElementById('recordingState');
-                this.reviewSection = document.getElementById('reviewSection');
-                this.reviewTimer = document.getElementById('reviewTimer');
-                this.progressBar = document.getElementById('progressBar');
-                this.playButton = document.getElementById('playButton');
-                this.cancelBtn = document.getElementById('cancelBtn');
-                this.rerecordBtn = document.getElementById('rerecordBtn');
-                this.sendBtn = document.getElementById('sendBtn');
-                this.errorMessage = document.getElementById('errorMessage');
-                this.successMessage = document.getElementById('successMessage');
-                this.loadingMessage = document.getElementById('loadingMessage');
-            }
+        const recordButton = document.getElementById('recordButton');
+        const stopButton = document.getElementById('stopButton');
+        const playButton = document.getElementById('playButton');
+        const cancelButton = document.getElementById('cancelButton');
+        const sendButton = document.getElementById('sendButton');
+        const reRecordButton = document.getElementById('reRecordButton');
+        const statusDiv = document.getElementById('status');
+        const durationDiv = document.getElementById('duration');
 
-            bindEvents() {
-                // Touch and mouse events for recording
-                this.micButton.addEventListener('mousedown', () => this.startRecording());
-                this.micButton.addEventListener('mouseup', () => this.stopRecording());
-                this.micButton.addEventListener('mouseleave', () => this.stopRecording());
-                
-                this.micButton.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
-                    this.startRecording();
-                });
-                this.micButton.addEventListener('touchend', (e) => {
-                    e.preventDefault();
-                    this.stopRecording();
-                });
+        function formatDuration(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+        }
 
-                // Review section events
-                this.playButton.addEventListener('click', () => this.togglePlayback());
-                this.cancelBtn.addEventListener('click', () => this.cancelRecording());
-                this.rerecordBtn.addEventListener('click', () => this.rerecord());
-                this.sendBtn.addEventListener('click', () => this.sendRecording());
-            }
-
-            checkBrowserSupport() {
-                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                    this.showError('Your browser does not support audio recording');
-                    return false;
-                }
-                return true;
-            }
-
-            async requestMicrophonePermission() {
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({
-                        audio: {
-                            echoCancellation: true,
-                            noiseSuppression: true,
-                            autoGainControl: true
-                        }
-                    });
-                    return stream;
-                } catch (error) {
-                    let errorMsg = 'Microphone access denied';
-                    if (error.name === 'NotAllowedError') {
-                        errorMsg = 'Please allow microphone access and try again';
-                    } else if (error.name === 'NotFoundError') {
-                        errorMsg = 'No microphone found on your device';
-                    }
-                    this.showError(errorMsg);
-                    throw error;
-                }
-            }
-
-            async startRecording() {
-                if (this.isRecording) return;
-
-                try {
-                    this.hideMessages();
-                    const stream = await this.requestMicrophonePermission();
-                    
-                    this.audioChunks = [];
-                    this.mediaRecorder = new MediaRecorder(stream, {
-                        mimeType: 'audio/webm;codecs=opus'
-                    });
-
-                    this.mediaRecorder.ondataavailable = (event) => {
-                        if (event.data.size > 0) {
-                            this.audioChunks.push(event.data);
-                        }
-                    };
-
-                    this.mediaRecorder.onstop = () => {
-                        this.audioBlob = new Blob(this.audioChunks, { 
-                            type: 'audio/webm;codecs=opus' 
-                        });
-                        this.audioUrl = URL.createObjectURL(this.audioBlob);
-                        this.enterReviewMode();
-                        
-                        // Stop all tracks to release microphone
-                        stream.getTracks().forEach(track => track.stop());
-                    };
-
-                    this.mediaRecorder.start(100); // Collect data every 100ms
-                    this.isRecording = true;
-                    this.recordingDuration = 0;
-                    
-                    this.updateRecordingUI();
-                    this.startRecordingTimer();
-
-                } catch (error) {
-                    console.error('Error starting recording:', error);
-                }
-            }
-
-            stopRecording() {
-                if (!this.isRecording || !this.mediaRecorder) return;
-
-                this.mediaRecorder.stop();
-                this.isRecording = false;
-                this.stopRecordingTimer();
-            }
-
-            updateRecordingUI() {
-                this.micButton.className = 'mic-button recording';
-                this.statusText.textContent = 'Recording...';
-                this.statusText.className = 'status-text recording-text';
-                this.timer.style.display = 'block';
-                this.recordingIndicator.style.display = 'block';
-                this.instruction.textContent = 'Release to stop';
-            }
-
-            startRecordingTimer() {
-                this.recordingTimer = setInterval(() => {
-                    this.recordingDuration++;
-                    this.timer.textContent = this.formatTime(this.recordingDuration);
-                }, 1000);
-            }
-
-            stopRecordingTimer() {
-                if (this.recordingTimer) {
-                    clearInterval(this.recordingTimer);
-                    this.recordingTimer = null;
-                }
-            }
-
-            enterReviewMode() {
-                this.recordingState.style.display = 'none';
-                this.reviewSection.classList.add('active');
-                this.reviewTimer.textContent = this.formatTime(this.recordingDuration);
-                this.progressBar.style.width = '0%';
-            }
-
-            async togglePlayback() {
-                if (this.isPlaying) {
-                    this.stopPlayback();
-                } else {
-                    await this.startPlayback();
-                }
-            }
-
-            async startPlayback() {
-                if (!this.audioUrl) return;
-
-                try {
-                    this.audio = new Audio(this.audioUrl);
-                    this.audio.currentTime = 0;
-                    
-                    this.audio.addEventListener('ended', () => {
-                        this.stopPlayback();
-                    });
-
-                    this.audio.addEventListener('timeupdate', () => {
-                        if (this.audio && this.recordingDuration > 0) {
-                            const progress = (this.audio.currentTime / this.recordingDuration) * 100;
-                            this.progressBar.style.width = `${progress}%`;
-                        }
-                    });
-
-                    await this.audio.play();
-                    this.isPlaying = true;
-                    this.playButton.textContent = '⏸️';
-                    
-                } catch (error) {
-                    console.error('Error playing audio:', error);
-                    this.showError('Error playing recording');
-                }
-            }
-
-            stopPlayback() {
-                if (this.audio) {
-                    this.audio.pause();
-                    this.audio.currentTime = 0;
-                    this.audio = null;
-                }
-                this.isPlaying = false;
-                this.playButton.textContent = '▶️';
-                this.progressBar.style.width = '0%';
-            }
-
-            cancelRecording() {
-                this.cleanup();
-                this.resetToIdleState();
-            }
-
-            rerecord() {
-                this.cleanup();
-                this.resetToIdleState();
-                // Auto-start recording
-                setTimeout(() => this.startRecording(), 100);
-            }
-
-            async sendRecording() {
-                if (!this.audioBlob) {
-                    this.showError('No recording to send');
-                    return;
-                }
-
-                try {
-                    this.showLoading();
-                    
-                    const formData = new FormData();
-                    formData.append('audio', this.audioBlob, 'voice_message.webm');
-                    formData.append('user_id', 'user123'); // Replace with actual user ID
-                    formData.append('timestamp', Date.now().toString());
-                    formData.append('duration', this.recordingDuration.toString());
-
-                    // Replace with your backend URL
-                    const response = await fetch('http://192.168.1.3:3000/upload-voice', {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    if (response.ok) {
-                        this.showSuccess('Voice message sent successfully!');
-                        // Send success message to Flutter
-                        this.postMessageToFlutter('audio_sent', { success: true });
-                    } else {
-                        throw new Error(`Server error: ${response.status}`);
-                    }
-
-                } catch (error) {
-                    console.error('Error sending audio:', error);
-                    this.showError('Failed to send voice message');
-                    this.postMessageToFlutter('audio_sent', { success: false, error: error.message });
-                } finally {
-                    this.hideLoading();
-                    setTimeout(() => {
-                        this.cleanup();
-                        this.resetToIdleState();
-                    }, 2000);
-                }
-            }
-
-            postMessageToFlutter(type, data) {
-                // For Flutter WebView communication
-                if (window.flutter_inappwebview) {
-                    window.flutter_inappwebview.callHandler('audioMessage', {
-                        type: type,
-                        data: data
-                    });
-                }
-                
-                // For debugging in regular browser
-                console.log('Message to Flutter:', { type, data });
-            }
-
-            cleanup() {
-                this.stopPlayback();
-                if (this.audioUrl) {
-                    URL.revokeObjectURL(this.audioUrl);
-                    this.audioUrl = null;
-                }
-                this.audioBlob = null;
-                this.audioChunks = [];
-            }
-
-            resetToIdleState() {
-                this.recordingState.style.display = 'block';
-                this.reviewSection.classList.remove('active');
-                this.micButton.className = 'mic-button idle';
-                this.statusText.textContent = 'Hold to Record';
-                this.statusText.className = 'status-text';
-                this.timer.style.display = 'none';
-                this.recordingIndicator.style.display = 'none';
-                this.instruction.textContent = 'Tap and hold to record';
-                this.recordingDuration = 0;
-                this.hideMessages();
-            }
-
-            formatTime(seconds) {
-                const mins = Math.floor(seconds / 60);
-                const secs = seconds % 60;
-                return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-            }
-
-            showError(message) {
-                this.errorMessage.textContent = message;
-                this.errorMessage.style.display = 'block';
-                setTimeout(() => this.hideMessages(), 5000);
-            }
-
-            showSuccess(message) {
-                this.successMessage.textContent = message;
-                this.successMessage.style.display = 'block';
-            }
-
-            showLoading() {
-                this.loadingMessage.style.display = 'block';
-            }
-
-            hideLoading() {
-                this.loadingMessage.style.display = 'none';
-            }
-
-            hideMessages() {
-                this.errorMessage.style.display = 'none';
-                this.successMessage.style.display = 'none';
+        function updateDuration() {
+            if (recordingStartTime) {
+                const elapsedSeconds = Math.floor((Date.now() - recordingStartTime) / 1000);
+                durationDiv.textContent = formatDuration(elapsedSeconds);
             }
         }
 
-        // Initialize the voice recorder when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            new VoiceRecorder();
-        });
+        function showRecordingUI() {
+            recordButton.style.display = 'inline-flex';
+            stopButton.style.display = 'none';
+            playButton.style.display = 'none';
+            cancelButton.style.display = 'none';
+            sendButton.style.display = 'none';
+            reRecordButton.style.display = 'none';
+            statusDiv.textContent = 'Press and hold to record';
+            durationDiv.textContent = '00:00';
+            durationDiv.style.color = '#007bff';
+        }
 
-        // Handle page visibility for cleanup
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden && window.voiceRecorder) {
-                window.voiceRecorder.cleanup();
+        function showReviewUI() {
+            recordButton.style.display = 'none';
+            stopButton.style.display = 'none';
+            playButton.style.display = 'inline-flex';
+            cancelButton.style.display = 'inline-flex';
+            sendButton.style.display = 'inline-flex';
+            reRecordButton.style.display = 'inline-flex';
+            statusDiv.textContent = 'Review Recording';
+            durationDiv.style.color = '#28a745'; // Green for review
+        }
+
+        // --- Recording Logic ---
+        recordButton.addEventListener('mousedown', startRecording);
+        recordButton.addEventListener('touchstart', startRecording); // For mobile touch
+
+        stopButton.addEventListener('mouseup', stopRecording);
+        stopButton.addEventListener('touchend', stopRecording); // For mobile touch
+        stopButton.addEventListener('mouseleave', (e) => { // Stop if mouse leaves button while pressed
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                stopRecording();
             }
         });
+
+        async function startRecording() {
+            audioChunks = [];
+            audioBlob = null;
+            audioPlayer.src = ''; // Clear previous audio
+            durationDiv.textContent = '00:00';
+            statusDiv.textContent = 'Recording...';
+            durationDiv.style.color = '#dc3545'; // Red for recording
+
+            recordButton.style.display = 'none';
+            stopButton.style.display = 'inline-flex';
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.ondataavailable = event => {
+                    audioChunks.push(event.data);
+                };
+                mediaRecorder.onstop = () => {
+                    audioBlob = new Blob(audioChunks, { type: 'audio/aac' }); // Or 'audio/webm' depending on browser support
+                    audioPlayer.src = URL.createObjectURL(audioBlob);
+                    clearInterval(recordingInterval);
+                    showReviewUI();
+                };
+                mediaRecorder.start();
+                recordingStartTime = Date.now();
+                recordingInterval = setInterval(updateDuration, 1000);
+                console.log('Recording started');
+            } catch (err) {
+                console.error('Error accessing microphone:', err);
+                statusDiv.textContent = 'Microphone access denied or error!';
+                showRecordingUI(); // Go back to initial state
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop()); // Stop microphone track
+                console.log('Recording stopped');
+            }
+        }
+
+        // --- Playback Logic ---
+        playButton.addEventListener('click', () => {
+            if (audioBlob) {
+                if (audioPlayer.paused) {
+                    audioPlayer.play();
+                    playButton.innerHTML = '<span class="icon">&#9209;</span> Stop Play';
+                    playbackInterval = setInterval(() => {
+                        const currentDuration = Math.floor(audioPlayer.currentTime);
+                        durationDiv.textContent = formatDuration(currentDuration);
+                    }, 1000);
+                } else {
+                    audioPlayer.pause();
+                    audioPlayer.currentTime = 0;
+                    playButton.innerHTML = '<span class="icon">&#9654;</span> Play';
+                    durationDiv.textContent = formatDuration(Math.floor(audioPlayer.duration));
+                    clearInterval(playbackInterval);
+                }
+            }
+        });
+
+        audioPlayer.addEventListener('ended', () => {
+            playButton.innerHTML = '<span class="icon">&#9654;</span> Play';
+            clearInterval(playbackInterval);
+            durationDiv.textContent = formatDuration(Math.floor(audioPlayer.duration));
+        });
+
+        // --- Action Buttons ---
+        cancelButton.addEventListener('click', () => {
+            audioChunks = [];
+            audioBlob = null;
+            audioPlayer.src = '';
+            console.log('Recording cancelled');
+            showRecordingUI();
+        });
+
+        reRecordButton.addEventListener('click', () => {
+            audioChunks = [];
+            audioBlob = null;
+            audioPlayer.src = '';
+            console.log('Re-recording...');
+            showRecordingUI();
+            // Automatically start recording after clearing
+            startRecording();
+        });
+
+        sendButton.addEventListener('click', () => {
+            if (audioBlob) {
+                statusDiv.textContent = 'Sending...';
+                sendAudioToFlutter(audioBlob); // Or send directly to backend
+                showRecordingUI(); // Return to initial state after sending
+            }
+        });
+
+        // --- Communication with Flutter (WebView) ---
+        async function sendAudioToFlutter(audioBlob) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64data = reader.result;
+                console.log('Sending audio to Flutter...');
+                // The name 'VoiceRecorder' must match the JavaScript channel name in Flutter
+                if (window.VoiceRecorder && window.VoiceRecorder.postMessage) {
+                     window.VoiceRecorder.postMessage(JSON.stringify({
+                        type: 'audioData',
+                        data: base64data,
+                        duration: Math.floor(audioPlayer.duration) // Send duration as well
+                    }));
+                } else {
+                    console.error("Flutter JavaScript channel 'VoiceRecorder' not found.");
+                    // Fallback: send directly to backend if Flutter channel isn't ready
+                    // You might want to implement this or show an error to the user
+                    uploadAudioToBackend(audioBlob);
+                }
+            };
+            reader.readAsDataURL(audioBlob); // Read as Base64 for easy transfer
+        }
+
+        // --- Direct Upload to Backend (Alternative/Fallback) ---
+        async function uploadAudioToBackend(audioBlob) {
+            const formData = new FormData();
+            formData.append('audio', audioBlob, 'voice_message.aac'); // Match your backend's expected field name
+            formData.append('user_id', 'web_user_123'); // Example additional data
+            formData.append('timestamp', Date.now().toString());
+
+            try {
+                const response = await fetch('http://192.168.1.3:3000/upload-voice', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    statusDiv.textContent = 'Voice message sent successfully!';
+                    console.log('Audio uploaded successfully to backend.');
+                    // Notify Flutter if needed, e.g., window.VoiceRecorder.postMessage('uploadSuccess');
+                } else {
+                    const errorText = await response.text();
+                    statusDiv.textContent = `Failed to send: ${errorText}`;
+                    console.error('Failed to upload audio to backend:', response.status, errorText);
+                    // Notify Flutter of failure
+                }
+            } catch (error) {
+                statusDiv.textContent = 'Network error during upload.';
+                console.error('Error uploading audio:', error);
+                // Notify Flutter of network error
+            }
+        }
+        
+        // Initial state
+        showRecordingUI();
+
+        // Ensure browser asks for permission on user interaction
+        // For security, getUserMedia must be called in response to a user gesture.
+        // We'll prompt for permission when the user first tries to record.
     </script>
 </body>
 </html>
