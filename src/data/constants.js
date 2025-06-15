@@ -8,7 +8,7 @@ export const Bio = {
   github: "https://github.com/raghav029",
   resume:
     "https://drive.google.com/file/d/1WLp5chW44Wd_jtixid-w9zBTj5va1ymY/view?usp=sharing",
-  linkedin: "https://www.linkedin.com/in/raghav-kumar-jha-76674r/",
+  linkedin: "https://www.linkedin.com/in/raghavvvvv/",
 };
 
 export const skills = [
