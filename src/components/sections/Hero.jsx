@@ -178,11 +178,11 @@ const ResumeButton = styled.a`
 `;
 
 const Img = styled.img`
-  border-radius: 10%;
+  border-radius: 20px;
   width: 100%;
   height: 100%;
-  max-width: 400px;
-  max-height: 400px;
+  max-width: 500px;
+  max-height: 500px;
   border: 2px solid ${({ theme }) => theme.primary};
 
   @media (max-width: 640px) {
