@@ -67,14 +67,14 @@
             margin-top: 20px;
             font-size: 1.1em;
             font-weight: bold;
-            min-height: 25px; /* To prevent layout shift */
+            min-height: 25px;
         }
         .duration-display {
             margin-top: 15px;
             font-size: 2.2em;
             font-weight: bold;
             color: #007bff;
-            min-height: 40px; /* To prevent layout shift */
+            min-height: 40px; 
         }
         .recording-indicator {
             width: 20px;
@@ -82,7 +82,7 @@
             background-color: #dc3545;
             border-radius: 50%;
             margin: 0 auto 10px;
-            display: none; /* Hidden by default */
+            display: none; 
             animation: pulse 1.5s infinite ease-in-out;
         }
 
@@ -170,7 +170,7 @@
             cancelButton.style.display = 'none';
             sendButton.style.display = 'none';
             reRecordButton.style.display = 'none';
-            recordingIndicator.style.display = 'none'; // Hide indicator
+            recordingIndicator.style.display = 'none'; 
             statusDiv.textContent = 'Press and hold to record';
             durationDiv.textContent = '00:00';
             durationDiv.style.color = '#007bff';
@@ -183,9 +183,9 @@
             cancelButton.style.display = 'none';
             sendButton.style.display = 'none';
             reRecordButton.style.display = 'none';
-            recordingIndicator.style.display = 'block'; // Show indicator
+            recordingIndicator.style.display = 'block'; 
             statusDiv.textContent = 'Recording... Release to stop';
-            durationDiv.style.color = '#dc3545'; // Red for recording
+            durationDiv.style.color = '#dc3545'; 
         }
 
         function showReviewUI() {
@@ -195,19 +195,18 @@
             cancelButton.style.display = 'inline-flex';
             sendButton.style.display = 'inline-flex';
             reRecordButton.style.display = 'inline-flex';
-            recordingIndicator.style.display = 'none'; // Hide indicator
+            recordingIndicator.style.display = 'none';
             statusDiv.textContent = 'Review Recording';
-            durationDiv.style.color = '#28a745'; // Green for review
+            durationDiv.style.color = '#28a745'; 
             // Set initial playback duration to full recording duration
             if (audioBlob) {
-                audioPlayer.src = URL.createObjectURL(audioBlob); // Ensure src is set for duration
+                audioPlayer.src = URL.createObjectURL(audioBlob); 
                 audioPlayer.onloadedmetadata = () => {
                     durationDiv.textContent = formatDuration(Math.floor(audioPlayer.duration));
                 };
             }
         }
 
-        // --- Recording Logic ---
         recordButton.addEventListener('mousedown', startRecording);
         recordButton.addEventListener('touchstart', startRecording);
 
@@ -222,12 +221,12 @@
 
 
         async function startRecording() {
-            if (mediaRecorder && mediaRecorder.state === 'recording') return; // Prevent multiple starts
+            if (mediaRecorder && mediaRecorder.state === 'recording') return; 
 
             audioChunks = [];
             audioBlob = null;
             audioPlayer.src = '';
-            clearInterval(playbackInterval); // Clear any existing playback interval
+            clearInterval(playbackInterval); 
 
             showRecordingActiveUI();
 
@@ -238,17 +237,13 @@
                     audioChunks.push(event.data);
                 };
                 mediaRecorder.onstop = () => {
-                    // Stop all tracks on the stream to release microphone
                     stream.getTracks().forEach(track => track.stop());
 
                     if (audioChunks.length > 0) {
-                        // Use 'audio/webm' as it's widely supported and good for quality/size
-                        // If you specifically need AAC, ensure your backend supports it or convert.
                         audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
                         clearInterval(recordingInterval);
                         showReviewUI();
                     } else {
-                        // If no audio was recorded (e.g., very short press), return to initial state
                         console.warn("No audio data recorded. Returning to initial state.");
                         showRecordingUI();
                     }
@@ -321,15 +316,15 @@
             audioPlayer.src = '';
             clearInterval(playbackInterval);
             console.log('Re-recording...');
-            showRecordingUI(); // Reset UI
-            startRecording(); // Automatically start recording after clearing
+            showRecordingUI(); 
+            startRecording(); 
         });
 
         sendButton.addEventListener('click', () => {
             if (audioBlob) {
                 statusDiv.textContent = 'Sending...';
-                sendAudioToFlutter(audioBlob); // Send to Flutter
-                // The UI will be reset to initial state after Flutter confirms send or error
+                //sendAudioToFlutter(audioBlob); 
+                uploadAudioToBackend(audioBlob);
             }
         });
 
@@ -337,20 +332,17 @@
         async function sendAudioToFlutter(audioBlob) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                // Ensure the base64 string includes the data URL prefix for proper decoding in Flutter
-                const base64data = reader.result; // This will be "data:audio/webm;base64,..."
+                const base64data = reader.result; 
                 console.log('Sending audio to Flutter...');
-                // The name 'VoiceRecorder' must match the JavaScript channel name in Flutter
                 if (window.VoiceRecorder && window.VoiceRecorder.postMessage) {
                     try {
                         window.VoiceRecorder.postMessage(JSON.stringify({
                             type: 'audioData',
                             data: base64data,
                             duration: Math.floor(audioPlayer.duration),
-                            mimeType: audioBlob.type // Pass MIME type for correct decoding
+                            mimeType: audioBlob.type 
                         }));
                         statusDiv.textContent = 'Audio sent to app for upload.';
-                        // After sending, transition to initial UI
                         showRecordingUI();
                     } catch (e) {
                         console.error("Error sending message to Flutter:", e);
@@ -359,17 +351,80 @@
                 } else {
                     console.error("Flutter JavaScript channel 'VoiceRecorder' not found. Cannot send audio to app.");
                     statusDiv.textContent = 'App connection error!';
-                    // Fallback: If Flutter channel isn't ready, you might want to upload directly
-                    // uploadAudioToBackend(audioBlob);
                 }
             };
-            reader.readAsDataURL(audioBlob); // Read as Base64 for easy transfer
+            reader.readAsDataURL(audioBlob); 
         }
 
-        // Initial state on load
-        document.addEventListener('DOMContentLoaded', showRecordingUI);
+        // --- Direct Upload to Backend (Alternative/Fallback) ---
+        async function uploadAudioToBackend(audioBlob) {
+            const formData = new FormData();
+            formData.append('audio', audioBlob, 'voice_message.webm'); 
+            formData.append('user_id', 'web_user_123'); 
+            formData.append('timestamp', Date.now().toString());
+            formData.append('duration', Math.floor(audioPlayer.duration).toString());
 
-        // Inform Flutter when the page is loaded and ready
+
+            try {
+                const backendUrl = 'http://192.168.1.3:3000/upload-voice'; 
+                statusDiv.textContent = 'Uploading directly...'; 
+
+                const response = await fetch(backendUrl, {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    statusDiv.textContent = 'Voice message sent successfully!';
+                    console.log('Audio uploaded successfully to backend directly.');
+
+                    // Notify Flutter of success
+                    if (window.VoiceRecorder && window.VoiceRecorder.postMessage) {
+                        window.VoiceRecorder.postMessage(JSON.stringify({
+                            type: 'uploadStatus',
+                            success: true,
+                            message: 'Voice message sent successfully!'
+                        }));
+                    }
+                } else {
+                    const errorText = await response.text();
+                    statusDiv.textContent = `Failed to send: ${errorText}`;
+                    console.error('Failed to upload audio to backend directly:', response.status, errorText);
+
+                    // Notify Flutter of failure
+                    if (window.VoiceRecorder && window.VoiceRecorder.postMessage) {
+                        window.VoiceRecorder.postMessage(JSON.stringify({
+                            type: 'uploadStatus',
+                            success: false,
+                            message: `Failed to send: ${errorText}`
+                        }));
+                    }
+                }
+            } catch (error) {
+                statusDiv.textContent = 'Network error during upload.';
+                console.error('Error uploading audio directly:', error);
+
+                // Notify Flutter of network error
+                if (window.VoiceRecorder && window.VoiceRecorder.postMessage) {
+                    window.VoiceRecorder.postMessage(JSON.stringify({
+                        type: 'uploadStatus',
+                        success: false,
+                        message: `Network error during upload: ${error.message}`
+                    }));
+                }
+            } finally {
+                // Return to initial state after sending/attempt
+                showRecordingUI();
+            }
+        }
+
+        sendButton.addEventListener('click', () => {
+            if (audioBlob) {
+                statusDiv.textContent = 'Sending...';
+                uploadAudioToBackend(audioBlob); // <--- Call directly
+            }
+        });
+        document.addEventListener('DOMContentLoaded', showRecordingUI);
         if (window.VoiceRecorder && window.VoiceRecorder.postMessage) {
             window.VoiceRecorder.postMessage(JSON.stringify({ type: 'pageLoaded' }));
         }
