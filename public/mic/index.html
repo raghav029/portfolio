@@ -198,7 +198,6 @@
             recordingIndicator.style.display = 'none';
             statusDiv.textContent = 'Review Recording';
             durationDiv.style.color = '#28a745'; 
-            // Set initial playback duration to full recording duration
             if (audioBlob) {
                 audioPlayer.src = URL.createObjectURL(audioBlob); 
                 audioPlayer.onloadedmetadata = () => {
@@ -255,7 +254,7 @@
             } catch (err) {
                 console.error('Error accessing microphone:', err);
                 statusDiv.textContent = 'Microphone access denied or error!';
-                showRecordingUI(); // Go back to initial state
+                showRecordingUI(); 
                  // Send a message to Flutter about the permission error
                 if (window.VoiceRecorder && window.VoiceRecorder.postMessage) {
                     window.VoiceRecorder.postMessage(JSON.stringify({
@@ -323,8 +322,8 @@
         sendButton.addEventListener('click', () => {
             if (audioBlob) {
                 statusDiv.textContent = 'Sending...';
-                //sendAudioToFlutter(audioBlob); 
-                uploadAudioToBackend(audioBlob);
+                sendAudioToFlutter(audioBlob); 
+                //uploadAudioToBackend(audioBlob);
             }
         });
 
@@ -340,7 +339,10 @@
                             type: 'audioData',
                             data: base64data,
                             duration: Math.floor(audioPlayer.duration),
-                            mimeType: audioBlob.type 
+                            mimeType: audioBlob.type ,
+                            sizeBytes: audioBlob.size,
+                            sizeKB: (audioBlob.size / 1024).toFixed(2),
+                            sizeMB: (audioBlob.size / (1024 * 1024)).toFixed(2)
                         }));
                         statusDiv.textContent = 'Audio sent to app for upload.';
                         showRecordingUI();
@@ -413,7 +415,6 @@
                     }));
                 }
             } finally {
-                // Return to initial state after sending/attempt
                 showRecordingUI();
             }
         }
