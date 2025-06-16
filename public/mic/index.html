@@ -220,8 +220,25 @@
 
 
         async function startRecording() {
-            if (mediaRecorder && mediaRecorder.state === 'recording') return; 
 
+            if (window.VoiceRecorder) {
+                window.VoiceRecorder.postMessage(JSON.stringify({ type: "requestMicPermission" }));
+            }
+            window.onFlutterMicPermission = function (granted) {
+                if (granted) {
+                    navigator.mediaDevices.getUserMedia({ audio: true })
+                        .then((stream) => {
+                            // Continue with recording
+                        })
+                        .catch((error) => {
+                            // Handle browser-level permission denied
+                            console.error("Mic access denied by browser:", error);
+                        });
+                } else {
+                    alert("Mic permission was not granted by app.");
+                }
+            };
+            if (mediaRecorder && mediaRecorder.state === 'recording') return; 
             audioChunks = [];
             audioBlob = null;
             audioPlayer.src = '';
@@ -256,12 +273,12 @@
                 statusDiv.textContent = 'Microphone access denied or error!';
                 showRecordingUI(); 
                  // Send a message to Flutter about the permission error
-                if (window.VoiceRecorder && window.VoiceRecorder.postMessage) {
-                    window.VoiceRecorder.postMessage(JSON.stringify({
-                        type: 'error',
-                        message: 'Microphone permission denied or error accessing microphone.'
-                    }));
-                }
+                // if (window.VoiceRecorder && window.VoiceRecorder.postMessage) {
+                //     window.VoiceRecorder.postMessage(JSON.stringify({
+                //         type: 'error',
+                //         message: 'Microphone permission denied or error accessing microphone.'
+                //     }));
+                // }
             }
         }
 
@@ -278,7 +295,7 @@
                 if (audioPlayer.paused) {
                     audioPlayer.play();
                     playButton.innerHTML = '<span class="icon">&#9209;</span> Stop Play';
-                    clearInterval(playbackInterval); // Clear previous
+                    clearInterval(playbackInterval); 
                     playbackInterval = setInterval(() => {
                         const currentDuration = Math.floor(audioPlayer.currentTime);
                         durationDiv.textContent = formatDuration(currentDuration);
