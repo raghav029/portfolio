@@ -4,7 +4,7 @@ import path from 'path';
 export default function handler(req, res) {
   const { lang } = req.query;
 
-  const supportedLangs = ['hi', 'en', 'kn'];
+  const supportedLangs = ['hi', 'en', 'kn', 'gu', 'mr', 'ta'];
   if (!supportedLangs.includes(lang)) {
     return res.status(400).json({ error: 'Unsupported language' });
   }
